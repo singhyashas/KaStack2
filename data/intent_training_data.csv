@@ -1,0 +1,80 @@
+message,intent
+remind me to submit the report tomorrow,reminder
+remind me to call my sister tonight,reminder
+please remind me about the meeting at 6,reminder
+set a reminder for my project deadline,reminder
+don't let me forget the placement form,reminder
+remind me to drink water after lunch,reminder
+can you remind me to send the file,reminder
+remind me about the interview practice,reminder
+notify me to check the result,reminder
+remind me to revise aptitude questions,reminder
+remind me to call mom in the evening,reminder
+remind me before the deadline,reminder
+please remind me to upload the document,reminder
+set a reminder to pay the fee,reminder
+i need a reminder for the demo call,reminder
+i feel anxious about tomorrow,emotional-support
+i am overwhelmed and tired,emotional-support
+can you help me calm down,emotional-support
+i feel sad about my argument,emotional-support
+today has been emotionally heavy,emotional-support
+i need support because i am nervous,emotional-support
+i am frustrated and stuck,emotional-support
+i feel lonely right now,emotional-support
+please encourage me a little,emotional-support
+i am worried i will fail,emotional-support
+i feel stressed about the exam,emotional-support
+i need someone to listen,emotional-support
+i am scared and confused,emotional-support
+this is making me feel low,emotional-support
+i feel pressure and need reassurance,emotional-support
+send the email to professor,action-item
+send notes to the team,action-item
+send the notes to my team,action-item
+send the final notes to the group,action-item
+send the update after dinner,action-item
+prepare the final project notes,action-item
+create a checklist for submission,action-item
+call the team and confirm the demo,action-item
+finish the system design document,action-item
+upload the code to github,action-item
+write the readme file,action-item
+record the loom walkthrough,action-item
+clean the dataset table,action-item
+run the benchmark script,action-item
+submit the assignment on the portal,action-item
+share the github link with the recruiter,action-item
+make the slides for review,action-item
+test the app before deployment,action-item
+update the system design section,action-item
+hey how are you,small-talk
+what's up,small-talk
+good morning,small-talk
+haha that sounds fun,small-talk
+cool thanks,small-talk
+nice let's do it,small-talk
+okay got it,small-talk
+hello there,small-talk
+that is funny,small-talk
+see you later,small-talk
+how is your day going,small-talk
+thanks that helped,small-talk
+great let's continue,small-talk
+sounds good to me,small-talk
+nice work so far,small-talk
+blue rectangle memory cloud,unknown
+the window tastes like algebra,unknown
+random unrelated sentence,unknown
+asdf qwer zxcv,unknown
+unknown command with no intent,unknown
+banana voltage folder,unknown
+this text has no clear request,unknown
+silent green protocol,unknown
+unmapped phrase about nothing,unknown
+fragment without meaning,unknown
+purple engine outside calendar,unknown
+words without a task or feeling,unknown
+unclassified noisy input,unknown
+empty topic sentence fragment,unknown
+miscellaneous unrelated text,unknown
