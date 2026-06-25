@@ -7,7 +7,8 @@ def main():
     train_if_needed()
     print("Model stats:", get_model_stats())
     print("Benchmark summary:", benchmark_summary())
-    print(benchmark().to_string(index=False))
+    for row in benchmark():
+        print(row)
 
 
 if __name__ == "__main__":

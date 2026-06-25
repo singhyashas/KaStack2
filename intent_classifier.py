@@ -1,17 +1,19 @@
 import csv
+import json
+import math
 import time
+from collections import Counter, defaultdict
 from pathlib import Path
-
-import joblib
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
 
 
 ROOT = Path(__file__).parent
 DATA_PATH = ROOT / "data" / "intent_training_data.csv"
-MODEL_PATH = ROOT / "models" / "intent_model.joblib"
+MODEL_PATH = ROOT / "models" / "intent_model.json"
+
+
+def _tokenize(text):
+    cleaned = "".join(ch.lower() if ch.isalnum() else " " for ch in text)
+    return [token for token in cleaned.split() if token]
 
 
 def train_if_needed():
@@ -20,35 +22,74 @@ def train_if_needed():
         return
 
     rows = list(csv.DictReader(DATA_PATH.open("r", encoding="utf-8")))
-    texts = [row["message"] for row in rows]
-    labels = [row["intent"] for row in rows]
+    class_counts = Counter()
+    token_counts = defaultdict(Counter)
+    total_tokens = Counter()
+    vocabulary = set()
 
-    model = Pipeline(
-        [
-            ("tfidf", TfidfVectorizer(ngram_range=(1, 3), min_df=1, sublinear_tf=True)),
-            ("classifier", LogisticRegression(max_iter=1000, C=4.0, class_weight="balanced")),
-        ]
-    )
-    model.fit(texts, labels)
-    joblib.dump(model, MODEL_PATH)
+    for row in rows:
+        label = row["intent"]
+        class_counts[label] += 1
+        tokens = _tokenize(row["message"])
+        token_counts[label].update(tokens)
+        total_tokens[label] += len(tokens)
+        vocabulary.update(tokens)
+
+    model = {
+        "class_counts": dict(class_counts),
+        "token_counts": {label: dict(counts) for label, counts in token_counts.items()},
+        "total_tokens": dict(total_tokens),
+        "vocabulary": sorted(vocabulary),
+        "training_rows": len(rows),
+    }
+    MODEL_PATH.write_text(json.dumps(model), encoding="utf-8")
+
+
+def _load_model():
+    train_if_needed()
+    return json.loads(MODEL_PATH.read_text(encoding="utf-8"))
+
+
+def _predict_scores(model, message):
+    tokens = _tokenize(message)
+    vocabulary_size = max(len(model["vocabulary"]), 1)
+    total_docs = sum(model["class_counts"].values())
+    scores = {}
+
+    for label, count in model["class_counts"].items():
+        log_prob = math.log(count / total_docs)
+        label_token_counts = model["token_counts"][label]
+        label_total = model["total_tokens"][label]
+
+        for token in tokens:
+            token_count = label_token_counts.get(token, 0)
+            log_prob += math.log((token_count + 1) / (label_total + vocabulary_size))
+
+        scores[label] = log_prob
+
+    return scores
+
+
+def _confidence(scores):
+    max_score = max(scores.values())
+    exp_scores = {label: math.exp(score - max_score) for label, score in scores.items()}
+    total = sum(exp_scores.values())
+    return {label: value / total for label, value in exp_scores.items()}
 
 
 def classify_intent(message):
-    train_if_needed()
-    model = joblib.load(MODEL_PATH)
+    model = _load_model()
 
     start = time.perf_counter()
-    intent = model.predict([message])[0]
-
-    confidence = 1.0
-    if hasattr(model.named_steps["classifier"], "predict_proba"):
-        confidence = float(model.predict_proba([message]).max())
-
+    scores = _predict_scores(model, message)
+    probabilities = _confidence(scores)
+    intent = max(probabilities, key=probabilities.get)
     latency_ms = (time.perf_counter() - start) * 1000
+
     return {
         "message": message,
         "intent": intent,
-        "confidence": confidence,
+        "confidence": probabilities[intent],
         "latency_ms": latency_ms,
     }
 
@@ -71,14 +112,15 @@ def benchmark(messages=None):
         "blue rectangle memory cloud",
     ]
     results = [classify_intent(message) for message in examples]
-    return pd.DataFrame(results)
+    return results
 
 
 def benchmark_summary(messages=None):
     frame = benchmark(messages)
+    latencies = [row["latency_ms"] for row in frame]
     return {
         "sample_count": len(frame),
-        "average_latency_ms": round(float(frame["latency_ms"].mean()), 3),
-        "max_latency_ms": round(float(frame["latency_ms"].max()), 3),
+        "average_latency_ms": round(sum(latencies) / len(latencies), 3),
+        "max_latency_ms": round(max(latencies), 3),
         "model_size_mb": get_model_stats()["model_size_mb"],
     }
