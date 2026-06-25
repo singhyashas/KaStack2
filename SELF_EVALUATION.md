@@ -15,7 +15,7 @@
 | Contradiction flagging | Complete | Flags positive/negative context changes about the same topic |
 | System design doc | Complete | Covers local storage, sync boundaries, and conflict strategy |
 | GitHub repo | Complete | https://github.com/singhyashas/KaStack2 |
-| Hosted demo | Complete | Streamlit deployment prepared from the GitHub repo |
+| Hosted demo | Complete | https://kastack2-uswnirmxb9evozzssbbucc.streamlit.app/ |
 | Loom walkthrough | Complete | https://www.loom.com/share/67470d2d4b9a48979e115b5ba90bc652 |
 
 ## Test Evidence
