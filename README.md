@@ -2,14 +2,19 @@
 
 A compact Streamlit project for persona drift detection, offline intent classification, and conflict-aware memory retrieval.
 
+## Submission Links
+
+- GitHub repo: https://github.com/singhyashas/KaStack2
+- Loom walkthrough: https://www.loom.com/share/67470d2d4b9a48979e115b5ba90bc652
+
 ## Current Results
 
 - Persona timeline includes Day 1 as curious & formal, Day 4 as casual & frustrated, and Day 7 as casual & playful.
 - Round 1 persona input is included at `data/round1_persona.json` using the provided extraction schema.
 - The app summarizes Round 1 speaker traits, facts, preferences, and communication style before showing drift.
 - Detected topic checkpoints are shown separately from the stored sample topics.
-- Intent model size after training: about 0.043 MB.
-- Benchmark inference latency: about 1 ms per message on local CPU.
+- Intent model size after training: about 0.005 MB.
+- Benchmark inference latency: well under 200 ms per message on local CPU.
 - The sister memory query retrieves three relevant chunks, ranks the latest memory highest, and flags the contradiction.
 
 ## Features
@@ -20,7 +25,7 @@ A compact Streamlit project for persona drift detection, offline intent classifi
 - Topic checkpoint splitting for user messages
 - Mood and tone drift detector with likely trigger extraction
 - Offline intent classifier for reminder, emotional-support, action-item, small-talk, and unknown
-- CPU-friendly scikit-learn model with a small disk footprint
+- CPU-friendly pure-Python intent model with a small disk footprint
 - Conflict-aware memory resolver for contradictory memories
 - One-page system design and self-evaluation files
 
@@ -28,9 +33,7 @@ A compact Streamlit project for persona drift detection, offline intent classifi
 
 - Python
 - Streamlit
-- pandas
-- scikit-learn
-- joblib
+- Standard-library JSON and CSV processing
 
 ## Run Locally
 
@@ -65,7 +68,7 @@ Persona Engine
       |
       v
 Offline Intent Classifier
-  TF-IDF + Logistic Regression
+  pure-Python Naive Bayes
       |
       v
 Memory Resolver
@@ -74,7 +77,7 @@ Memory Resolver
 
 ## Model Choice
 
-The intent classifier uses TF-IDF features and Logistic Regression. This keeps inference local, fast, and small enough for the placement requirement of a lightweight offline model.
+The intent classifier uses a lightweight Naive Bayes model trained from the local CSV file and saved as JSON. This keeps inference fully offline, fast, easy to inspect, and small enough for the placement requirement of a lightweight model.
 
 ## Conflict Resolver
 
