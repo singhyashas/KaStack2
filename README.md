@@ -6,7 +6,7 @@ A compact Streamlit project for persona drift detection, offline intent classifi
 
 - GitHub repo: https://github.com/singhyashas/KaStack2
 - Hosted demo: https://kastack2-uswnirmxb9evozzssbbucc.streamlit.app/
-- Loom walkthrough: https://www.loom.com/share/67470d2d4b9a48979e115b5ba90bc652
+- Loom walkthrough: 
 
 ## Current Results
 
