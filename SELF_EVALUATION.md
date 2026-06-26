@@ -16,7 +16,7 @@
 | System design doc | Complete | Covers local storage, sync boundaries, and conflict strategy |
 | GitHub repo | Complete | https://github.com/singhyashas/KaStack2 |
 | Hosted demo | Complete | https://kastack2-uswnirmxb9evozzssbbucc.streamlit.app/ |
-| Loom walkthrough | Complete | https://www.loom.com/share/67470d2d4b9a48979e115b5ba90bc652 |
+| Loom walkthrough | Complete |  |
 
 ## Test Evidence
 
